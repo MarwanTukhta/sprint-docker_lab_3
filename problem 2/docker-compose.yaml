@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  app:
+    build: .
+    ports:
+    - 3000:3000
+    depends_on:
+    - database
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PORT: 3306
+      DB_HOST: database
+    env_file: ".env"
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+    - my-volume2:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    expose: 
+    - "3306"
+    env_file: ".env"
+volumes:
+  my-volume2:
